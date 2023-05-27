@@ -13,9 +13,9 @@ int main(int argc, char** argv)
      * started to work on the project 28 of may 2023 at 1:44 am new zealand time
      * the setup of boost took too much time (on a mac)
     */
-    argc = 3;
-    argv[1] = strdup("/Users/machd/simulator/tests/3xor.in");
-    argv[2] = strdup("json");
+    //argc = 3;
+    //argv[1] = strdup("/Users/machd/simulator/tests/3xor.in");
+    //argv[2] = strdup("json");
 
     if (argc < 2)
     {
