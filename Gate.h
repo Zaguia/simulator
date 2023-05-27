@@ -7,7 +7,8 @@
 class Gate
 {
 public:
-	Gate() {}
+    Gate() {}
+
 	explicit Gate(std::string name, const GateType* type) : m_name(name), m_type(type) {};
 	void ConnectInput(int i, Gate* target);
 	void AddOutput(Gate* target);
@@ -29,4 +30,5 @@ private:
 	bool m_probed{};
 	int m_output{};
 	int m_delay{};
+
 };

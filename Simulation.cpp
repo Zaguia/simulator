@@ -116,11 +116,11 @@ void Simulation::LayoutFromFile(std::ifstream& is)
 
 int Simulation::Step()
 {
-	int stepTime = m_queue.min()->time;
+    int stepTime = m_queue.min()->time;
 	std::vector<Transition> transitions;
-	while (m_queue.len() > 0 && m_queue.min()->time == stepTime)
+    while (m_queue.len() > 0 && m_queue.min()->time == stepTime)//finds the one having a minimum time
 	{
-		auto transition = m_queue.pop();
+        auto transition = m_queue.pop();//pops the one having a minimum time
 		if (!transition->IsValid())
 			continue;
 		transition->Apply();
@@ -128,6 +128,7 @@ int Simulation::Step()
 			m_probes.emplace_back(Probe{ transition->time, transition->gate->GetName(), transition->newOutput });
 		transitions.emplace_back(*transition);
 	}
+
 
 	for (const auto transition : transitions)
 	{
@@ -141,13 +142,23 @@ int Simulation::Step()
 	return stepTime;
 }
 
+
+
 void Simulation::Run()
 {
-	std::sort(m_inTransitions.begin(), m_inTransitions.end());
-	for (const auto& t : m_inTransitions)
+    //std::sort(m_inTransitions.begin(), m_inTransitions.end());
+    /*
+     * second problem may be fixed the  28 of may 2023 at 9:34 am new zealand time
+     * after discovering this I kept trying to get rid of the O(2) - it's a test so I did not proceed with too many changes
+     * std sort is n*log(n) so I may be wrong.
+    */
+    int i=0 ;
+    for (const auto& t : m_inTransitions){
 		m_queue.append(t);
-	while (m_queue.len() > 0)
-		Step();
+    }
+    while (m_queue.len() > 0){
+        Step();
+    }
 	std::sort(m_probes.begin(), m_probes.end());
 }
 
@@ -180,6 +191,7 @@ void Simulation::PrintProbes(std::ostream& os)
         //related to request 1
         //if (!m_circuit->GetGate(probe.gateName)->IsProbed())
         //    continue;
+
 		os << probe.time << " " << probe.gateName << " " << probe.newValue << std::endl;
 	}
 		

@@ -20,5 +20,5 @@ public:
 private:
 	std::map<std::string, TruthTable> m_truthTables;
 	std::map<std::string, GateType> m_gateTypes;
-	std::map<std::string, Gate> m_gates;
+    std::map<std::string, Gate> m_gates;
 };

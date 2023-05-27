@@ -1,11 +1,11 @@
 #include <stdexcept>
 #include "Circuit.h"
-/* 
-Adds a truth table that can be later attached to gate types.
-Args:
-	name: A unique string used to identify the truth table.
-	output_list: A list of outputs for the truth table.
-*/
+
+//Adds a truth table that can be later attached to gate types.
+//Args:
+//	name: A unique string used to identify the truth table.
+//	output_list: A list of outputs for the truth table.
+
 void Circuit::AddTruthTable(std::string type, std::vector<int> outputs)
 {
 	if (m_truthTables.find(type) != m_truthTables.end())
@@ -14,15 +14,15 @@ void Circuit::AddTruthTable(std::string type, std::vector<int> outputs)
 
 }
 
-/* 
- Adds a gate type that can be later attached to gates.
 
-Args:
-	name: A unique string used to identify the gate type.
-	truth_table_name: The name of the gate's truth table.
-	delay: The gate's delay from an input transition to an output
-		transition.
-*/
+// Adds a gate type that can be later attached to gates.
+
+//Args:
+//	name: A unique string used to identify the gate type.
+//	truth_table_name: The name of the gate's truth table.
+//	delay: The gate's delay from an input transition to an output
+//		transition.
+
 void Circuit::AddGateType(std::string name, std::string truthTableName, int delay)
 {
 	if (m_gateTypes.find(name) != m_gateTypes.end())
@@ -32,16 +32,16 @@ void Circuit::AddGateType(std::string name, std::string truthTableName, int dela
 	m_gateTypes.insert({ name, GateType(name, &(m_truthTables[truthTableName]), delay) });
 }
 
-/* 
- Adds a gate and connects it to other gates.
 
-Args:
-	name: A unique string used to identify the gate.
-	type_name: The name of the gate's type.
-	input_names: List of the names of gates whose outputs are connected
-		to this gate's inputs.
+// Adds a gate and connects it to other gates.
 
-*/
+//Args:
+//	name: A unique string used to identify the gate.
+//	type_name: The name of the gate's type.
+//	input_names: List of the names of gates whose outputs are connected
+//		to this gate's inputs.
+
+
 void Circuit::AddGate(std::string name, std::string typeName, std::vector<std::string> inputNames)
 {
 	if (m_gates.find(name) != m_gates.end())

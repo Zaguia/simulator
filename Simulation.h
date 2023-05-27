@@ -45,17 +45,18 @@ public:
 	void LayoutFromFile(std::ifstream& is);
 	void AddTransition(std::string gateName, int outputValue, int outputTime);
 	Circuit* GetCircut() { return m_circuit.get(); }
-	int Step();
-	void Run();
+    int Step();
+    void Run();
 	void ProbeAllGates() { m_undoLog = m_circuit->ProbeAllGates(); }
 	void UndoProbeAllGates();
 	boost::property_tree::ptree GetJson();
 	void PrintProbes(std::ostream& os);
+
 private:
 	std::unique_ptr<Circuit> m_circuit;
 	std::string m_layout;
 	std::vector<Transition> m_inTransitions;
 	PriorityQueue<Transition> m_queue;
 	std::vector<Probe> m_probes;
-	std::vector<Gate*> m_undoLog;
+    std::vector<Gate*> m_undoLog;
 };

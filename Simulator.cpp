@@ -13,9 +13,9 @@ int main(int argc, char** argv)
      * started to work on the project 28 of may 2023 at 1:44 am new zealand time
      * the setup of boost took too much time (on a mac)
     */
-    //argc = 3;
-    //argv[1] = "/Users/machd/simulator/tests/3xor.in";
-    //argv[2] = "json";
+    argc = 3;
+    argv[1] = strdup("/Users/machd/simulator/tests/3xor.in");
+    argv[2] = strdup("json");
 
     if (argc < 2)
     {
@@ -38,8 +38,9 @@ int main(int argc, char** argv)
         /*
          * first problem fixed the  28 of may 2023 at 2:25 am new zealand time
          * the debugger is refusing to work
+         * https://stackoverflow.com/questions/9132826/stop-developer-tools-access-needs-to-take-control-of-another-process-for-debugg
         */
-        
+
     simulation->Run();
     if (json)
         simulation->UndoProbeAllGates();

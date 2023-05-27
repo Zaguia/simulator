@@ -17,6 +17,8 @@ add_executable(simulator
     Gate.h
     Simulation.h
     TruthTable.h
+    GateType.h
+    PriorityQueue.h
     Circuit.cpp
     Gate.cpp
     Simulation.cpp
