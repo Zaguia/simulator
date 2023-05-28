@@ -148,10 +148,13 @@ void Simulation::Run()
 {
     //std::sort(m_inTransitions.begin(), m_inTransitions.end());
     /*
-     * second problem may be fixed the  28 of may 2023 at 9:34 am new zealand time
-     * after discovering this I kept trying to get rid of the O(2) - it's a test so I did not proceed with too many changes
-     * std sort is n*log(n) so I may be wrong.
+     * second problem may be fixed  Monday, May 29, 2023 (GMT+12) am new Zealand time
+     * after discovering this I kept trying to get rid of the O(3) - it's a test so I did not proceed with too many changes
+     * a tree for the queue would've decreased o(1)=n to log(n)
+     * the program is able to simulate stable state machines like controllers and memory. Simplifying it to a sequential would've limited it to data paths
+     * std sort is probably n*log(n) using a merge sort or a binary tree sort.
     */
+
     int i=0 ;
     for (const auto& t : m_inTransitions){
 		m_queue.append(t);
