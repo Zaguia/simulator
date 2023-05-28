@@ -34,6 +34,17 @@ boost::property_tree::ptree Probe::GetJson()
 	return children;
 }
 
+std::string Probe::GetFileOutput()
+{
+    std::string shift = "\t\t";
+    std::string a="\n"+shift+"[\n";
+    a = a+ shift+"\t\""+std::to_string(time)+"\",\n";
+    a = a+ shift+"\t\""+gateName+"\",\n";
+    a = a+ shift+"\t\""+std::to_string(newValue)+"\"\n";
+    a = a+ shift+"]";
+    return a;
+}
+
 
 void Simulation::AddTransition(std::string gateName, int outputValue, int outputTime)
 {
@@ -176,14 +187,52 @@ void Simulation::UndoProbeAllGates()
 
 boost::property_tree::ptree Simulation::GetJson()
 {
-	boost::property_tree::ptree pt;
-	pt.add_child("circuit", m_circuit->GetJson());
+    std::string a = "";
+    boost::property_tree::ptree pt;
+    pt.add_child("cuircuit", m_circuit->GetJson());
 	boost::property_tree::ptree probes;
 	for (auto& p : m_probes)
 		probes.push_back(std::make_pair("",p.GetJson()));
 	pt.add_child("trace", probes);
 	pt.add("layout", m_layout);
 	return pt;
+}
+
+std::string Simulation::GetFileOutput()
+{
+    std::string shift = "\t";
+    std::string a = "";
+    a = a + m_circuit->GetFileOutput();
+    a = a + shift+"\"trace\":\n";
+    a = a + shift +"[";
+    int i=0;
+    for (auto& p : m_probes){
+        a = a+ p.GetFileOutput();
+        if(i<m_probes.size()-1){
+            a = a+ ",\n";
+        }else{
+            a = a+ "\n";
+        }
+    }
+    a = a + shift+"],\n";
+
+    // s is our escaped output string
+    std::string s = "";
+    // loop through all characters
+    for(char c : m_layout)
+    {
+        if (c != '\\' and c != '"') {
+          s = s+c;
+        }else{
+           s= s+"\\";
+           s = s+c;
+        }
+    }
+
+    a = a + "\t\"layout\": \""+ s+"\"";
+    //pt.add_child("trace", probes);
+    //pt.add("layout", m_layout);
+    return a;
 }
 
 void Simulation::PrintProbes(std::ostream& os)

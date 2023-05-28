@@ -22,6 +22,8 @@ public:
 	int GetTransitionTime(int time) const;
 	void UndoProbe();
 	boost::property_tree::ptree GetJson();
+    std::string bool_cast(const bool b);
+    std::string GetFileOutput();
 private:
 	const GateType* m_type{};
 	std::string m_name;

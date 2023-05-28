@@ -13,9 +13,9 @@ int main(int argc, char** argv)
      * started to work on the project 28 of may 2023 at 1:44 am new zealand time
      * the setup of boost took too much time (on a mac)
     */
-    //argc = 3;
-    //argv[1] = strdup("/Users/machd/simulator/tests/3xor.in");
-    //argv[2] = strdup("json");
+    argc = 3;
+    argv[1] = strdup("/Users/machd/simulator/tests/3xor.in");
+    argv[2] = strdup("json");
 
     if (argc < 2)
     {
@@ -38,7 +38,6 @@ int main(int argc, char** argv)
         /*
          * first problem fixed the  28 of may 2023 at 2:25 am new zealand time
          * the debugger is refusing to work
-         * https://stackoverflow.com/questions/9132826/stop-developer-tools-access-needs-to-take-control-of-another-process-for-debugg
         */
 
     simulation->Run();
@@ -46,11 +45,16 @@ int main(int argc, char** argv)
         simulation->UndoProbeAllGates();
     if (argc >= 3 && "json" == std::string(argv[2]))
     {
-        boost::property_tree::ptree simResult = simulation->GetJson();
+        //boost::property_tree::ptree simResult = simulation->GetJson();
+        std::string simultionResult = simulation->GetFileOutput();
         std::ofstream output("circuit.jsonp", std::ios::out);
-        output << "onJsonp(";
-        boost::property_tree::write_json(output, simResult);
-        output << ");\n";
+        //std::ofstream output2("circuit2.jsonp", std::ios::out);
+        //output << "onJsonp(";
+        //boost::property_tree::write_json(output, simResult);
+        //output << ");\n";
+        output << "onJsonp(\n";
+        output << simultionResult;
+        output << "\n);\n";
     }
     simulation->PrintProbes(std::cout);
 }

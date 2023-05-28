@@ -82,7 +82,28 @@ boost::property_tree::ptree Circuit::GetJson()
 	{
 		pt.push_back(std::make_pair("", v.GetJson()));
 	}
+
 	boost::property_tree::ptree ret;
 	ret.add_child("gates", pt);
 	return ret;
+}
+
+std::string Circuit::GetFileOutput()
+{
+    std::string shift = "\t";
+    std::string a = shift+"\"circuit\": \n";
+    a = a+shift+"[\n";
+    int i=0;
+    for (auto& [k, v] : m_gates)
+    {
+        a = a + v.GetFileOutput();
+        if(i<m_gates.size()-1){
+            a = a+ ",\n";
+        }else{
+            a = a+ "\n";
+        }
+    }
+    a = a + shift+"],\n";
+
+    return a;
 }
