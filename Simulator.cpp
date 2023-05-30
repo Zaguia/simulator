@@ -14,10 +14,10 @@ int main(int argc, char** argv)
     /*
      * started to work on the project 28 of may 2023 at 1:44 am new zealand time
      * the setup of boost took too much time (on a mac)
-*/
-    argc = 3;
-    argv[1] = strdup("/Users/machd/simulator/tests/5devadas13.in");
-    argv[2] = strdup("json");
+    */
+    //argc = 3;
+    //argv[1] = strdup("/Users/machd/simulator/tests/3xor.in");
+    //argv[2] = strdup("json");
 
     if (argc < 2)
     {
@@ -30,16 +30,17 @@ int main(int argc, char** argv)
     auto simulation = Simulation::FromFile(input);
 
     //related to request 1
-    simulation->PrintProbes(std::cout);
-
-    if (json)
-    {
+    //if (json)
+    //{
         simulation->LayoutFromFile(input);
         // probe all gates should only be executed when
         // json output is on 
         simulation->ProbeAllGates();
-    }
-
+    //}
+        /*
+         * first problem fixed the  28 of may 2023 at 2:25 am new zealand time
+         * the debugger is refusing to work
+        */
 
 
 
