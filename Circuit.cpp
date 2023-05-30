@@ -74,7 +74,7 @@ std::vector<Gate*> Circuit::ProbeAllGates()
 	}
 	return probed;
 }
-
+/*
 boost::property_tree::ptree Circuit::GetJson()
 {
 	boost::property_tree::ptree pt;
@@ -87,7 +87,7 @@ boost::property_tree::ptree Circuit::GetJson()
 	ret.add_child("gates", pt);
 	return ret;
 }
-
+*/
 std::string Circuit::GetFileOutput()
 {
     std::string shift = "\t";

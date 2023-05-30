@@ -4,10 +4,10 @@
 #include <boost/regex.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <algorithm>
+#include <queue>
 
 #include "Circuit.h"
 #include "Simulation.h"
-#include "PriorityQueue.h"
 
 int Transition::GlobalId = 0;
 
@@ -17,7 +17,7 @@ void Transition::Apply()
 		throw std::runtime_error("Gate output should not transition to the same value");
 	gate->SetOutput(newOutput);
 }
-
+/*
 boost::property_tree::ptree Probe::GetJson()
 {
 	boost::property_tree::ptree children;
@@ -33,7 +33,7 @@ boost::property_tree::ptree Probe::GetJson()
 
 	return children;
 }
-
+*/
 std::string Probe::GetFileOutput()
 {
     std::string shift = "\t\t";
@@ -55,12 +55,14 @@ void Simulation::AddTransition(std::string gateName, int outputValue, int output
 std::unique_ptr<Simulation> Simulation::FromFile(std::ifstream& is)
 {
 	auto simulation = std::make_unique<Simulation>();
-	auto* circut = simulation->GetCircut();
-	for (;;)
+    auto* circut = simulation->GetCircut();
+    std::string line;
+    /*
+     *  I replaced for(;;){
+     */
+    while (std::getline(is, line))
 	{
 		boost::char_separator<char> sep(" ");
-		std::string line;
-		std::getline(is, line);
 		boost::tokenizer< boost::char_separator<char>> tokens(line, sep);
 		std::vector<std::string> command;
 		for (const auto& v : tokens)
@@ -125,6 +127,7 @@ void Simulation::LayoutFromFile(std::ifstream& is)
 	m_layout = str;
 }
 
+/*
 int Simulation::Step()
 {
     int stepTime = m_queue.min()->time;
@@ -147,13 +150,12 @@ int Simulation::Step()
 		{
 			auto output = gate->GetTransitionOutput();
 			auto time = gate->GetTransitionTime(stepTime);
-			m_queue.append(Transition(gate, output, time));
+            m_queue.append(Transition(gate, output, time));
 		}
 	}
 	return stepTime;
 }
-
-
+*/
 
 void Simulation::Run()
 {
@@ -162,18 +164,44 @@ void Simulation::Run()
      * second problem may be fixed  Monday, May 29, 2023 (GMT+12) am new Zealand time
      * after discovering this I kept trying to get rid of the O(3) - it's a test so I did not proceed with too many changes
      * a tree for the queue would've decreased o(1)=n to log(n)
-     * the program is able to simulate stable state machines like controllers and memory. Simplifying it to a sequential would've limited it to data paths
+     * the program is able to simulate stable state machines like controllers and memory. Simplifying it to finite loops would've limited it to data paths
      * std sort is probably n*log(n) using a merge sort or a binary tree sort.
     */
 
-    int i=0 ;
-    for (const auto& t : m_inTransitions){
-		m_queue.append(t);
+    //int i=0 ;
+    //for (const auto& t : m_inTransitions){
+    //    m_queue.append(t);
+    //}
+    std::priority_queue<Transition, std::vector<Transition>, std::greater<Transition>>
+            m_queue(m_inTransitions.begin(), m_inTransitions.end());
+
+    while (m_queue.size() > 0){
+        int stepTime =  m_queue.top().time;
+        std::vector<Transition> transitions;
+        while (m_queue.size() > 0 && m_queue.top().time == stepTime)//m_queue.min() returns the smallest time
+        {
+            auto transition = m_queue.top();
+            m_queue.pop();//pops the smallest time
+            if (!transition.IsValid()){
+                continue;
+            }
+            transition.Apply();
+            if (transition.gate->IsProbed())
+                m_probes.emplace_back(Probe{ transition.time, transition.gate->GetName(), transition.newOutput });
+            transitions.emplace_back(transition);
+        }
+
+        for (const auto transition : transitions)
+        {
+            for (auto* gate : transition.gate->GetOutGates())
+            {
+                auto output = gate->GetTransitionOutput();
+                auto time = gate->GetTransitionTime(stepTime);
+                m_queue.push(Transition(gate, output, time));
+            }
+        }
     }
-    while (m_queue.len() > 0){
-        Step();
-    }
-	std::sort(m_probes.begin(), m_probes.end());
+    //std::sort(m_probes.begin(), m_probes.end());
 }
 
 void Simulation::UndoProbeAllGates()
@@ -184,7 +212,7 @@ void Simulation::UndoProbeAllGates()
 	}
 	m_undoLog.clear();
 }
-
+/*
 boost::property_tree::ptree Simulation::GetJson()
 {
     std::string a = "";
@@ -197,7 +225,7 @@ boost::property_tree::ptree Simulation::GetJson()
 	pt.add("layout", m_layout);
 	return pt;
 }
-
+*/
 std::string Simulation::GetFileOutput()
 {
     std::string shift = "\t";

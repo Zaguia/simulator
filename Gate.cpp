@@ -74,7 +74,7 @@ std::string Gate::GetFileOutput(){
     a = a+ shift+"]";
     return a;
 }
-
+/*
 boost::property_tree::ptree Gate::GetJson()
 {
 	boost::property_tree::ptree pt;
@@ -102,7 +102,7 @@ boost::property_tree::ptree Gate::GetJson()
 	pt.add_child("outputs", outputs);
 	return pt;
 }
-
+*/
 int Gate::GetTransitionOutput() const
 {
 	std::vector<int> inputs;

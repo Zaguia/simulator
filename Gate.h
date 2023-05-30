@@ -9,7 +9,7 @@ class Gate
 public:
     Gate() {}
 
-	explicit Gate(std::string name, const GateType* type) : m_name(name), m_type(type) {};
+    explicit Gate(std::string name, const GateType* type) : m_name(name), m_type(type) {}
 	void ConnectInput(int i, Gate* target);
 	void AddOutput(Gate* target);
 	void Probe() noexcept;
